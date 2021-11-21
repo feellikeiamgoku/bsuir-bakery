@@ -1,0 +1,51 @@
+{% extends "product_views/base.html" %}
+{% block content %}
+
+
+<div class="container d-flex justify-content-center align-items-center flex-column form-container">
+    <h1 class="text-center mb-5">Регистрация</h1>
+    {% if form.errors %}
+    {% for field in form %}
+    {% for error in field.errors %}
+    <div class="alert alert-danger text-center" style="min-width: 600px;">
+        <strong>{{ error|escape }}</strong>
+    </div>
+    {% endfor %}
+    {% endfor %}
+
+    {% for error in form.non_field_errors %}
+    <div class="alert alert-danger">
+        <strong>{{ error|escape }}</strong>
+    </div>
+    {% endfor %}
+
+    {% endif %}
+    <form action="." method="post">
+        <div class="mb-3">
+            <label for="phone" class="form-label">Ваш телефон</label>
+            {{ form.username }}
+        </div>
+        <div class="mb-4">
+            <label for="pass" class="form-label">Ваше имя</label>
+            {{ form.name }}
+        </div>
+        <div class="mb-4">
+            <label for="pass" class="form-label">Ваш пароль</label>
+            {{ form.password }}
+        </div>
+        <div class="mb-4">
+            <label for="pass" class="form-label">Повторите пароль</label>
+            {{ form.password_confirm }}
+        </div>
+        <div class="mb-4">
+            <a href="{% url 'product_views:login' %}" class="link-secondary text-decoration-none">Уже были у нас у
+                нас?</a>
+        </div>
+        {% csrf_token %}
+        <div class="mb-4">
+            <p><input class="btn btn-primary" type="submit" value="Регистрация"></p>
+        </div>
+    </form>
+
+</div>
+{% endblock %}

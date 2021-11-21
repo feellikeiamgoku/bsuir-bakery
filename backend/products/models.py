@@ -1,4 +1,5 @@
 from django.db import models
+
 from authenication.models import User
 
 class OrderStatuses(models.TextChoices):
@@ -36,6 +37,14 @@ class OrderProduct(models.Model):
         return f"{self.product_id} в кол-ве {self.quantity}"
 
 
+class Case(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="case")
+    products = models.ManyToManyField(OrderProduct, related_name="case", blank=True)
+
+    def __str__(self):
+        return f"Корзина пользователя № {self.user.id}"
+
+
 class Order(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     products = models.ManyToManyField(OrderProduct, related_name="order")
@@ -43,6 +52,4 @@ class Order(models.Model):
     payment_method = models.CharField(choices=PaymentMethods.choices, max_length=20)
 
     def __str__(self) -> str:
-        return f"Заказ для пользователя № {self.user_id}"
-
-
+        return f"Заказ для пользователя № {self.user_id.id}"

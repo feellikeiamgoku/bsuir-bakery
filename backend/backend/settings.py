@@ -33,6 +33,7 @@ AUTH_USER_MODEL = 'authenication.User'
 INSTALLED_APPS = [
     "authenication.apps.AuthConfig",
     "products.apps.ProductsConfig",
+    "product_views.apps.ProductViewsConfig",
     "django.contrib.admin",
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -82,7 +83,6 @@ TEMPLATES = [
     },
 ]
 
-APPEND_SLASH = False
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 

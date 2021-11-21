@@ -1,0 +1,53 @@
+{% extends "product_views/base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="pt-3 pb-5">
+        <a class="text-decoration-none link-secondary" aria-current="page" href="{% url 'product_views:menu' %}">
+            <i class="fas fa-long-arrow-alt-left fa-lg me-2"></i>
+            Назад</a>
+    </div>
+    <div class="row">
+        <div class="col">
+            <img src={{ product.image.url }} class="product-detail-img">
+        </div>
+        <div class="col-8">
+            <h1 class="header-detail-font">{{product.name}}</h1>
+            <div class="product-detail-price">
+                <p>{{product.price}}<span> р.</span></p>
+            </div>
+            <div class="add-to-card-detail row">
+                <div class="col">
+                    <p class="fw-bold">Колличество</p>
+                    <input class="form-control" type="number" value="1">
+                </div>
+                <div class="col add-to-card-detail-div">
+                    <form class="ms-4 add-to-card-detail-form">
+                        <input type="button" value="Добавить в корзину" class="btn btn-primary">
+                    </form>
+                </div>
+
+            </div>
+            <div class="mt-4">
+                <p class="fw-bold">Вес: <span class="fw-normal">{{product.weight}} гр.</span> </p>
+            </div>
+            <div class="mt-4">
+                <p class="fw-bold">Время готовки: <span class="fw-normal">{{product.time_to_cook}} мин.</span> </p>
+            </div>
+            <div class="mt-1">
+                <p class="fw-bold">Описание: <span class="fw-normal">{{product.description}}</span> </p>
+            </div>
+
+            <div class="mt-5">
+                <p class="fw-bold">Наше предложение</p>
+                <p>Если готовка займёт больше указанного времени - товар бесплатно</p>
+            </div>
+
+
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}

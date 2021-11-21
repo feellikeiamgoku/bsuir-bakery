@@ -1,0 +1,41 @@
+{% extends "product_views/base.html" %}
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center flex-column form-container">
+    <h1 class="mb-5 text-center">Войти</h1>
+    {% if form.errors %}
+    <div class="alert alert-danger" role="alert">
+        Неверный номер телефона или пароль
+    </div>
+    {% endif %}
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success" role="alert">
+        {{message}}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <form action="." method="post">
+        <div class="mb-3">
+            <label for="phone" class="form-label">Ваш телефон</label>
+            {{ form.phone }}
+        </div>
+        <div class="mb-4">
+
+            <label for="pass" class="form-label">Ваш пароль</label>
+            {{ form.password }}
+            <div class="mt-2">
+                <a href="{% url 'product_views:register' %}" class="link-secondary text-decoration-none">Ещё ничего
+                    не пробовали у нас?</a>
+            </div>
+
+        </div>
+        {% csrf_token %}
+        <div class="mb-4">
+            <p><input class="btn btn-primary" type="submit" value="Войти"></p>
+        </div>
+    </form>
+</div>
+{% endblock %}

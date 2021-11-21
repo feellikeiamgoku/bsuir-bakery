@@ -1,14 +1,9 @@
-import jwt
-
-from datetime import datetime, timedelta
-
-from django.conf import settings 
-from django.core.validators import RegexValidator
 from django.contrib.auth.models import (
 	AbstractBaseUser, BaseUserManager, PermissionsMixin
 )
 
-from django.db import models
+from django.db import models, IntegrityError
+
 
 class UserManager(BaseUserManager):
 
@@ -48,9 +43,19 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now_add=True)
 
     updated_at = models.DateTimeField(auto_now=True)
+
     USERNAME_FIELD = 'username'
 
     objects = UserManager()
 
     def __str__(self):
         return self.username
+
+    def save(self, *args, **kwargs) -> None:
+        from products.models import Case
+        super().save(*args, **kwargs)
+        try:
+            case = Case(user=self)
+            case.save()
+        except IntegrityError:
+            pass

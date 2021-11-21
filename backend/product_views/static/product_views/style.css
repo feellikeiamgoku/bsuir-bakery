@@ -1,0 +1,118 @@
+/* arbitrary */
+.heading-title{
+    font-size: 48px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.btn-primary {
+    background-color: #e0cfaf !important;
+    color:black !important;
+    border: none !important;
+}
+
+.btn-primary:hover{
+    background-color: #6b655a !important;
+    color:white !important;
+    border: none !important;
+}
+
+.content{
+    height: 1px;
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    height: 100%;
+    min-height: 100%;
+}
+
+/* header */
+.header{
+    height: 75px;
+}
+.navbar {
+    background-color: #e0cfaf;
+}
+
+.fa-shopping-cart{
+    color: grey;
+}
+
+.fa-shopping-cart:hover{
+    color: black;
+}
+
+.navbar-nav > li{
+    padding-left:30px;
+    padding-right:30px;
+}
+.logo-name{
+    font-family: 'Pacifico', cursive;
+    font-size: 25pt !important;
+}
+
+/* products */
+.card-img {
+    width: 400px;  
+    height: 293px;  
+}
+
+.card-img:hover {
+    transform: scale(1.05);
+    transition: 0.5s;
+}
+
+
+.card {
+    border: none !important;
+}
+
+.products-font {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+.products-links {
+    color: rgb(63, 58, 58);
+}
+
+.products-links:hover {
+    color: #836f4b;
+}
+
+
+/* product details */
+
+.product-detail-img {
+    width: 400px;
+    height: 450px;
+}
+
+.header-detail-font {
+    font-family: 'Amatic SC', cursive;
+}
+
+.product-detail-price {
+    color: #7a643b;
+    font-size: 20pt;
+    font-family: 'Lobster', cursive;
+}
+
+.add-to-card-detail-div {
+    position: relative;
+}
+.add-to-card-detail-form {
+    position: absolute;
+    bottom: 0;
+}
+
+
+/* auth */
+/* check if needed */
+.form-container {
+    min-height: 700px;
+
+}
