@@ -1,0 +1,79 @@
+{% extends "product_views/base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center heading-title mt-5">Заказы</h1>
+    {% if not orders %}
+    <div class="col no-padding-left">
+        <div class="pt-3 pb-5">
+            <a class="text-decoration-none link-secondary" aria-current="page" href="{% url 'product_views:menu' %}">
+                <i class="fas fa-long-arrow-alt-left fa-lg me-2"></i>
+                Продолжить покупки</a>
+        </div>
+    </div>
+    <h1 class="pt-5 text-center">У вас пока нету заказов :(</h1>
+    {% else %}
+    <div class="row pt-5">
+        <div class="col d-flex justify-content-center align-items-center">
+            Номер заказа
+        </div>
+        <div class="col d-flex justify-content-center align-items-center">
+            Колличество
+        </div>
+        <div class="col d-flex justify-content-center align-items-center">
+            Цена
+        </div>
+        <div class="col-2 d-flex justify-content-center align-items-center">
+            Создан
+        </div>
+        <div class="col-2 d-flex justify-content-center align-items-center">
+            Обновлён
+        </div>
+        <div class="col d-flex justify-content-center align-items-center">
+            Оплата
+        </div>
+        <div class="col d-flex justify-content-center align-items-center">
+            Статус
+        </div>
+        <div class="col">
+        </div>
+    </div>
+    {% for order in orders %}
+    <a href="{% url 'product_views:detail_orders' pk=order.id %}" class="text-decoration-none" style="color:black">
+        <div class="row cart-row-color mb-4" style="height: 100px;">
+            <div class="col d-flex justify-content-center align-items-center">
+                <span class="">№ {{order.id}}</span>
+            </div>
+            <div class="col d-flex justify-content-center align-items-center">
+                <span class="">{{order.get_total_products}}</span>
+            </div>
+            <div class="col d-flex justify-content-center align-items-center">
+                <span class="">{{order.get_total_price}} р.</span>
+            </div>
+            <div class="col-2 d-flex justify-content-center align-items-center">
+                <span class="">{{order.created|date:"d.m.y"}} {{ order.created|time:"H:i" }}
+                </span>
+            </div>
+            <div class="col-2 d-flex justify-content-center align-items-center">
+                <span class="">{{order.updated|date:"d.m.y"}} {{ order.updated|time:"H:i" }}</span>
+            </div>
+            <div class="col d-flex justify-content-center align-items-center">
+                <span class="">{{order.payment_method}}</span>
+            </div>
+            <div class="col d-flex justify-content-center align-items-center">
+                <span class="">{{order.status}}</span>
+            </div>
+            <div class="col d-flex justify-content-center align-items-center">
+                <form method="post" action="{% url 'product_views:update_orders' pk=order.id %}">
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-danger" value="Отменить">
+                    <input type="hidden" value="{{statuses.REFUSED}}" name="status">
+                </form>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+    {% endif %}
+</div>
+
+{% endblock %}

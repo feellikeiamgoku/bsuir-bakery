@@ -1,5 +1,5 @@
 from django.db import models
-
+from datetime import date, datetime
 from authenication.models import User
 
 class OrderStatuses(models.TextChoices):
@@ -28,6 +28,12 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+class ProductCategory(models.Model):
+    name = models.CharField(verbose_name="Название категории", max_length=20)
+    products = models.ManyToManyField(Product, "category", blank=True)
+
+    def __str__(self):
+        return self.name
 
 class OrderProduct(models.Model):
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -60,7 +66,8 @@ class Order(models.Model):
     products = models.ManyToManyField(OrderProduct, related_name="order")
     status = models.CharField(choices=OrderStatuses.choices, max_length=20, default=OrderStatuses.WAITING, verbose_name="Статус заказа")
     payment_method = models.CharField(choices=PaymentMethods.choices, max_length=20, verbose_name="Способ оплаты")
-    created = models.DateTimeField(verbose_name="Дата создания", auto_now=True)
+    created = models.DateTimeField(verbose_name="Дата создания", default=datetime.now, blank=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def get_total_price(self):
         total = self.products.all().aggregate(total=models.Sum(models.F("product_id__price") * models.F("quantity")))
@@ -70,5 +77,7 @@ class Order(models.Model):
         total = self.products.aggregate(total=models.Sum("quantity"))
         return total["total"]
 
+
     def __str__(self) -> str:
         return f"Заказ для пользователя № {self.user_id.id}"
+

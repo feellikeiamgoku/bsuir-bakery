@@ -96,7 +96,7 @@
     </div>
     <div class=" row">
         <div class="col d-flex justify-content-end">
-            <form action="{% url 'product_views:create_order' %}" method="post">
+            <form action="{% url 'product_views:create_list_order' %}" method="post">
                 {% csrf_token %}
                 <input type="submit" value="Оформить заказ" class="btn btn-primary">
                 <input name="payment_method" id="hid-payment-method" type="hidden" value="{{payment_methods.CASH}}">

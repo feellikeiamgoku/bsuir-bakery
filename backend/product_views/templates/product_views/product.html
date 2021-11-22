@@ -33,6 +33,17 @@
                 </div>
 
             </div>
+            {% with categories=product.category.all %}
+            {% if categories %}
+            <div class="mt-4">
+                <p class="fw-bold">Категории:{% for category in categories %}
+                    <a href="{% url 'product_views:menu'%}?categories={{category.name}}"
+                        class="text-decoration-none products-links"><span class="fw-normal">{{category.name}}</span></a>
+                    {% endfor %}
+                </p>
+            </div>
+            {% endif %}
+            {% endwith %}
             <div class="mt-4">
                 <p class="fw-bold">Вес: <span class="fw-normal">{{product.weight}} гр.</span> </p>
             </div>

@@ -3,9 +3,34 @@
 {% block content %}
 <div class="container mt-5">
   <h1 class="text-center heading-title">Наша выпечка</h1>
+  <form method="get" action="{% url 'product_views:menu' %}">
+    <div class="row">
+      <div class="col">
+        <label>По цене</label>
+        <select class="form-select" name="price-ord">
+          <option selected disabled>Выберете тип фильтра</option>
+          <option value="desc">Убывание</option>
+          <option value="asc">Возрастание</option>
+        </select>
+      </div>
+      <div class="col">
+        <label>По категориям</label>
+        <select class="form-select" size="1" name="categories" multiple>
+          {% for category in categories %}
+          <option value="{{category.name}}">{{category.name}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col">
+
+      </div>
+      <div class="col d-flex justify-content-center align-items-center"><input class="btn btn-primary" type="submit"
+          value="Фильтровать"></div>
+
+  </form>
   <div class="row">
     {% for product in products %}
-    <div class="card m-5" style="width: 18rem;">
+    <div class="card m-5" style="width: 18rem; display:block; position: inherit;">
       <img src={{ product.image.url }} class="card-img-top card-img" alt="...">
       <div class="card-body products-font">
         <a href="{% url 'product_views:menu_detail' pk=product.id %}" class="text-decoration-none products-links">
