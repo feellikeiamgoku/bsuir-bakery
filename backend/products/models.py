@@ -37,9 +37,19 @@ class OrderProduct(models.Model):
         return f"{self.product_id} в кол-ве {self.quantity}"
 
 
+
 class Case(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="case")
     products = models.ManyToManyField(OrderProduct, related_name="case", blank=True)
+
+
+    def get_total_price(self):
+        total = self.products.all().aggregate(total=models.Sum(models.F("product_id__price") * models.F("quantity")))
+        return total["total"]
+    
+    def get_total_products(self):
+        total = self.products.aggregate(total=models.Sum("quantity"))
+        return total["total"]
 
     def __str__(self):
         return f"Корзина пользователя № {self.user.id}"
@@ -48,8 +58,17 @@ class Case(models.Model):
 class Order(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     products = models.ManyToManyField(OrderProduct, related_name="order")
-    status = models.CharField(choices=OrderStatuses.choices, max_length=20, default=OrderStatuses.WAITING)
-    payment_method = models.CharField(choices=PaymentMethods.choices, max_length=20)
+    status = models.CharField(choices=OrderStatuses.choices, max_length=20, default=OrderStatuses.WAITING, verbose_name="Статус заказа")
+    payment_method = models.CharField(choices=PaymentMethods.choices, max_length=20, verbose_name="Способ оплаты")
+    created = models.DateTimeField(verbose_name="Дата создания", auto_now=True)
+
+    def get_total_price(self):
+        total = self.products.all().aggregate(total=models.Sum(models.F("product_id__price") * models.F("quantity")))
+        return total["total"]
+    
+    def get_total_products(self):
+        total = self.products.aggregate(total=models.Sum("quantity"))
+        return total["total"]
 
     def __str__(self) -> str:
         return f"Заказ для пользователя № {self.user_id.id}"

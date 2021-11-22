@@ -46,7 +46,8 @@
                     </ul>
                     {% if request.user.is_authenticated %}
                     <div class="d-flex">
-                        <a class="nav-link"><i class="fas fa-shopping-cart fa-2x"></i></a>
+                        <a class="nav-link" href="{% url 'product_views:cart' %}"><i
+                                class="fas fa-shopping-cart fa-2x"></i></a>
                     </div>
                     {% else %}
                     <ul class="navbar-nav">

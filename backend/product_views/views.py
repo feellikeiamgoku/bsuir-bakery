@@ -1,10 +1,16 @@
+import json
+
 from django.shortcuts import render, redirect
 from django.views import generic
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseNotAllowed, HttpResponse
 from product_views.forms import LoginForm, RegisterForm
 
-from products.models import Product
+from products.models import Case, Product, OrderProduct, Order, PaymentMethods
+
+import pdb
 
 def index(request):
     return render(request, "product_views/index.html")
@@ -21,8 +27,6 @@ class DetailProducts(generic.DetailView):
     template_name = 'product_views/product.html'
     context_object_name = 'product'
     model = Product
-
-
 
 def user_login(request):
     if request.user.is_authenticated:
@@ -57,3 +61,71 @@ def user_register(request):
     else:
         form = RegisterForm()
     return render(request, 'product_views/auth/register.html', {'form': form})
+
+
+@login_required
+def add_to_cart(request):
+    case = Case.objects.get(user=request.user)
+
+    if request.method == "POST":
+        product_id = request.POST["product_id"]
+        quantity = request.POST.get("quantity", 1) or 1
+        
+        product = Product.objects.get(id=product_id)
+        try:
+            product_in_case = case.products.get(product_id=product)
+            product_in_case.quantity += int(quantity)
+            product_in_case.save()
+        except OrderProduct.DoesNotExist:
+            order_product = OrderProduct(product_id=product, quantity=quantity)
+            order_product.save()
+            case.products.add(order_product)
+
+        return redirect(request.headers["Referer"])
+    elif request.method == "GET":
+        return render(request, "product_views/cart.html", {"cart": case, "payment_methods": PaymentMethods})
+    
+    elif request.method == "DELETE":
+        products = case.products.all().delete()
+        return redirect(request.headers["Referer"])
+
+
+@login_required
+def delete_item_from_cart(request, pk):
+    if request.method == "POST":
+        case = request.user.case
+        order_product = case.products.get(id=pk)
+        order_product.delete()
+        return redirect("product_views:cart")
+    else:
+        return HttpResponseNotAllowed()
+
+
+@login_required
+def update_item_from_cart(request, pk):
+    new_quantity = json.loads(request.body.decode("utf-8")).get("quantity")
+    if request.method == "POST":
+        case = request.user.case
+        order_product = case.products.get(id=pk)
+        order_product.quantity = int(new_quantity) if new_quantity else order_product.quantity
+        order_product.save()
+        return HttpResponse("success", status=200)
+    else:
+        return HttpResponseNotAllowed()
+
+
+@login_required
+def create_order(request):
+    if request.method == "POST":
+        case = request.user.case
+        payment_method = request.POST["payment_method"]
+        order = Order(user_id=request.user, payment_method=payment_method)
+        order.save()
+        for product in case.products.all():
+            order.products.add(product)
+        case.products.clear()
+        return redirect("product_views:menu")
+
+
+    else:
+        return HttpResponseNotAllowed()

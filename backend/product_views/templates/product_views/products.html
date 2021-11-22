@@ -18,7 +18,11 @@
         <li class="list-group-item">Вес: {{product.weight}} гр</li>
         <li class="list-group-item">Время готовки: {{product.time_to_cook}} мин</li>
       </ul>
-      <a href="#" class="btn btn-primary mb-2">В корзину</a>
+      <form action="/site/cart/" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="product_id" value="{{ product.id }}">
+        <input class="btn btn-primary mb-2" type="submit" value="В корзину" style="width: 100%;">
+      </form>
     </div>
 
 
