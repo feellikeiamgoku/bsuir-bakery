@@ -1,0 +1,30 @@
+{% extends "product_views/base.html" %}
+
+{% block content %}
+{% load static %}
+<div class="container col-xxl-8 px-4 py-5">
+    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+        <div class="col-10 col-sm-8 col-lg-6">
+            <img src="{% static 'product_views/images/about.jpg' %}" class="d-block mx-lg-auto img-fluid" width="700"
+                height="500" loading="lazy" style="filter:drop-shadow(0.6rem 0 0.5rem #918281)">
+        </div>
+        <div class="col-lg-6">
+            <h1 class="display-5 fw-bold lh-1 mb-3">О пекарне</h1>
+            <ul class="list-group list-group-flush" style="text-align: justify; font-size: 15pt;">
+                <li class=" list-group-item">Домашняя пекарня-кондитерская Династия впервые открыла двери в
+                    совсем недавно в Дзержинске.
+                    Династия началась со страсти к хлебу, новаторству и любви к традициям.</li>
+                <li class="list-group-item">У нашего хлеба длительный процесс производства. В сравнении с выпечкой хлеба
+                    по ускоренной технологии,
+                    времени на его приготовление требуется в 10 раз больше, что позволяет развить его вкус и аромат.
+                </li>
+            </ul>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start mt-3">
+                <a class="btn btn-primary btn-lg px-4 me-md-2" href="{% url 'product_views:menu' %}">Смотреть
+                    меню</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

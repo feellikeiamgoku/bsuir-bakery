@@ -1,0 +1,26 @@
+version: "3.3"
+   
+services:
+    db:
+        image: postgres
+        volumes:
+            - ./data/db:/var/lib/postgresql/data
+        env_file: ./backend/.env.local
+        ports: 
+            - "5432:5432"
+    backend:
+        build: ./backend
+        command: python manage.py runserver 0.0.0.0:8000
+        ports:
+            - "8000:8000"
+        env_file: ./backend/.env.local
+        depends_on:
+            - db
+            - migrate
+    migrate:
+        build: ./backend
+        env_file: ./backend/.env.local
+        command: bash -c "python manage.py migrate && python manage.py createsuperuser --no-input"
+        depends_on: 
+            - db
+

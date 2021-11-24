@@ -11,10 +11,15 @@ from product_views.forms import LoginForm, RegisterForm
 
 from products.models import Case, Product, OrderProduct, Order, PaymentMethods, OrderStatuses, ProductCategory
 
-import pdb 
 
 def index(request):
     return render(request, "product_views/index.html")
+
+def about(request):
+    return render(request, "product_views/about.html")
+
+def contacts(request):
+    return render(request, "product_views/contacts.html")
 
 
 class ListProducts(generic.ListView):
