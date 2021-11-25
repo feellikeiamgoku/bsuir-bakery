@@ -21,15 +21,14 @@
           {% endfor %}
         </select>
       </div>
-      <div class="col">
-
-      </div>
       <div class="col d-flex justify-content-center align-items-center"><input class="btn btn-primary" type="submit"
           value="Фильтровать"></div>
-
+    </div>
   </form>
+
   <div class="row">
     {% for product in products %}
+
     <div class="card m-5" style="width: 18rem; display:block; position: inherit;">
       <img src={{ product.image.url }} class="card-img-top card-img" alt="...">
       <div class="card-body products-font">
@@ -49,9 +48,8 @@
         <input class="btn btn-primary mb-2" type="submit" value="В корзину" style="width: 100%;">
       </form>
     </div>
-
-
     {% endfor %}
+
   </div>
 
 </div>

@@ -4,46 +4,7 @@
 <div class="container">
     <h1 class="text-center heading-title mt-5">Корзина</h1>
     {% with products=cart.products.all %}
-    {% if products %}
-
-    <div class="row pt-5">
-        <div class="col-md-4 col-sm-3">
-        </div>
-        <div class="col-3 d-flex justify-content-center align-items-center">
-            Колличество
-        </div>
-        <div class="col-2 d-flex justify-content-center align-items-center">
-            Цена за единицу
-        </div>
-        <div class="col">
-        </div>
-    </div>
-    {% for product in products %}
-
-    <div class="row cart-row-color mb-4">
-        <div class="col-md-4 col-sm-3 no-padding-left">
-            <img class="product-img-in-cart" src="{{ product.product_id.image.url }}">
-            <b>
-                <a class="products-links text-decoration-none ps-5"
-                    href="{% url 'product_views:menu_detail' pk=product.product_id.id %}">{{product.product_id.name}}</a>
-            </b>
-        </div>
-        <div class="col-md-3 d-flex justify-content-center align-items-center">
-            <input id="change-quantity" class="form-control" type="number" value="{{product.quantity}}"
-                data-product-id="{{product.id}}" min="1" max="100">
-        </div>
-        <div class="col-md-2 d-flex justify-content-center align-items-center">
-            <p class="product-detail-price">{{product.product_id.price}} р.</p>
-        </div>
-        <div class="col d-flex justify-content-center align-items-center">
-            <form action="{% url 'product_views:delete_item_from_cart' pk=product.id %}" method="post">
-                {% csrf_token %}
-                <input class="btn btn-primary" type="submit" value="Удалить">
-            </form>
-        </div>
-    </div>
-    {% endfor %}
-    {% endif %}
+    {% if not products %}
     <div class="row">
         <div class="col no-padding-left">
             <div class="pt-3 pb-5">
@@ -53,56 +14,99 @@
                     Продолжить покупки</a>
             </div>
         </div>
-        {% if not products %}
-        <h1 class="pt-5 text-center">В вашей корзине пока ничего нету :(</h1>
-        {% endif %}
-        {% if products %}
-        <div class="col d-flex justify-content-end no-padding-right">
-            <div>
-                <button id="full-delete" class="btn btn-primary">Очистить корзину</button>
-            </div>
+    </div>
+    <h1 class="pt-5 text-center">В вашей корзине пока ничего нету :(</h1>
+</div>
+{% else %}
+<div class="row pt-5">
+    <div class="col-md-4 col-sm-3">
+    </div>
+    <div class="col-3 d-flex justify-content-center align-items-center">
+        Колличество
+    </div>
+    <div class="col-2 d-flex justify-content-center align-items-center">
+        Цена за единицу
+    </div>
+    <div class="col">
+    </div>
+</div>
+{% for product in products %}
+
+<div class="row cart-row-color mb-4">
+    <div class="col-md-4 col-sm-3 no-padding-left">
+        <img class="product-img-in-cart" src="{{ product.product_id.image.url }}">
+        <b>
+            <a class="products-links text-decoration-none ps-5"
+                href="{% url 'product_views:menu_detail' pk=product.product_id.id %}">{{product.product_id.name}}</a>
+        </b>
+    </div>
+    <div class="col-md-3 d-flex justify-content-center align-items-center">
+        <input id="change-quantity" class="form-control" type="number" value="{{product.quantity}}"
+            data-product-id="{{product.id}}" min="1" max="100">
+    </div>
+    <div class="col-md-2 d-flex justify-content-center align-items-center">
+        <p class="product-detail-price">{{product.product_id.price}} р.</p>
+    </div>
+    <div class="col d-flex justify-content-center align-items-center">
+        <form action="{% url 'product_views:delete_item_from_cart' pk=product.id %}" method="post">
+            {% csrf_token %}
+            <input class="btn btn-primary" type="submit" value="Удалить">
+        </form>
+    </div>
+</div>
+{% endfor %}
+<div class="row">
+    <div class="col no-padding-left">
+        <div class="pt-3 pb-5">
+            <a class="text-decoration-none link-secondary" aria-current="page" href="{% url 'product_views:menu' %}">
+                <i class="fas fa-long-arrow-alt-left fa-lg me-2"></i>
+                Продолжить покупки</a>
         </div>
     </div>
-    <div class="row pb-5">
-        <div class="col d-flex justify-content-end">
-            <div class="cart-summary-box">
-                <div class="card" style="width: 30rem;">
-                    <div class="card-body card-row-color">
-                        <h3 class="card-title">Итого</h5>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="card-row-color list-group-item d-flex align-items-center justify-content-between">
-                            <span>Колличество:</span>
-                            <span class="product-detail-price">{{cart.get_total_products}}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span>Цена:</span>
-                            <span class="product-detail-price">{{cart.get_total_price}} р.</span>
-                        </li>
-                        <li class="list-group-item d-flex align-items-center justify-content-between pt-3">
-                            <label>Способ оплаты:</label>
-                            <select class="form-control" id="payment-method">
-                                {% for payment_method in payment_methods %}
-                                <option value="{{payment_method}}">{{payment_method}}</option>
-                                {% endfor %}
-                            </select>
-
-
-                        </li>
-                    </ul>
+    <div class="col d-flex justify-content-end no-padding-right">
+        <div>
+            <button id="full-delete" class="btn btn-primary">Очистить корзину</button>
+        </div>
+    </div>
+</div>
+<div class="row pb-5">
+    <div class="col d-flex justify-content-end">
+        <div class="cart-summary-box">
+            <div class="card" style="width: 30rem;">
+                <div class="card-body card-row-color">
+                    <h3 class="card-title">Итого</h5>
                 </div>
+                <ul class="list-group list-group-flush">
+                    <li class="card-row-color list-group-item d-flex align-items-center justify-content-between">
+                        <span>Колличество:</span>
+                        <span class="product-detail-price">{{cart.get_total_products}}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Цена:</span>
+                        <span class="product-detail-price">{{cart.get_total_price}} р.</span>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between pt-3">
+                        <label>Способ оплаты:</label>
+                        <select class="form-control" id="payment-method">
+                            {% for payment_method in payment_methods %}
+                            <option value="{{payment_method}}">{{payment_method}}</option>
+                            {% endfor %}
+                        </select>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
-    <div class=" row">
-        <div class="col d-flex justify-content-end">
-            <form action="{% url 'product_views:create_list_order' %}" method="post">
-                {% csrf_token %}
-                <input type="submit" value="Оформить заказ" class="btn btn-primary">
-                <input name="payment_method" id="hid-payment-method" type="hidden" value="{{payment_methods.CASH}}">
-            </form>
-        </div>
+</div>
+<div class=" row">
+    <div class="col d-flex justify-content-end">
+        <form action="{% url 'product_views:create_list_order' %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Оформить заказ" class="btn btn-primary">
+            <input name="payment_method" id="hid-payment-method" type="hidden" value="{{payment_methods.CASH}}">
+        </form>
     </div>
+</div>
 </div>
 {% endif %}
 {% endwith %}
