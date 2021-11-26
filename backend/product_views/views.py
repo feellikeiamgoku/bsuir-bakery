@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotAllowed, HttpResponse
 from product_views.forms import LoginForm, RegisterForm
 
-from products.models import Case, Product, OrderProduct, Order, PaymentMethods, OrderStatuses, ProductCategory
+from products.models import Case, Product, OrderProduct, Order, PaymentMethods, OrderStatuses, ProductCategory, Review, ProductReview
 
 
 def index(request):
@@ -183,3 +183,41 @@ def detail_orders(request, pk):
         if order.status != OrderStatuses.REFUSED:
             return render(request, "product_views/order_detail.html", {"order": order, "statuses": OrderStatuses})    
     return HttpResponseNotAllowed(["GET"])
+
+import pdb
+def company_reviews(request):
+    if request.method == "POST":
+        text = request.POST["review_text"]
+        raitng = request.POST.get("rate", 0)
+        review = Review(text=text, raitng=raitng, author=request.user)
+        review.save()
+        return redirect(request.headers["Referer"])
+
+    else:    
+        reviews = Review.objects.all()
+        return render(request, "product_views/company_reviews.html", {"reviews": reviews})
+
+def delete_company_review(request, pk):
+    if request.method == "POST":
+        Review.objects.get(id=pk).delete()
+        return redirect(request.headers["Referer"])
+
+    else:    
+        reviews = Review.objects.all()
+        return render(request, "product_views/company_reviews.html", {"reviews": reviews})
+
+
+def product_reviews(request, pk):
+    if request.method == "POST":
+        text = request.POST["review_text"]
+        product = Product.objects.get(id=pk)
+        prod_review = ProductReview(author=request.user, product=product, text=text)
+        prod_review.save()
+        
+        return redirect(f"/site/menu/{pk}")
+
+def product_reviews_delete(request, pk):
+    if request.method == "POST":
+        ProductReview.objects.get(id=pk).delete()
+        return redirect(request.headers["Referer"])
+

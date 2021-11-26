@@ -20,7 +20,7 @@ class PaymentMethods(models.TextChoices):
 class Product(models.Model):
     name = models.CharField(verbose_name="Название продукта", max_length=100)
     description = models.TextField(verbose_name="Описание", null=True)
-    price = models.PositiveIntegerField(verbose_name="Цена")
+    price = models.FloatField(verbose_name="Цена")
     weight = models.PositiveIntegerField(verbose_name="Вес")
     time_to_cook = models.PositiveIntegerField("Время готовки в минутах")
     image = models.ImageField("Изображение", upload_to="products", null=True)
@@ -81,3 +81,22 @@ class Order(models.Model):
     def __str__(self) -> str:
         return f"Заказ для пользователя № {self.user_id.id}"
 
+
+class Review(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Автор")
+    time_created = models.DateTimeField(verbose_name="Дата создания", auto_now=True)
+    text = models.TextField(verbose_name="Текст отзыва")
+    raitng = models.PositiveSmallIntegerField("Рейтинг", blank=True)
+
+    def __str__(self) -> str:
+        return f"Отзыв пользователя № {self.author.id}"
+
+
+class ProductReview(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Автор")
+    time_created = models.DateTimeField(verbose_name="Дата создания", auto_now=True)
+    text = models.TextField(verbose_name="Текст отзыва")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="Продукт", related_name="reviews")
+
+    def __str__(self) -> str:
+        return f"Отзыв пользователя № {self.author.id}"

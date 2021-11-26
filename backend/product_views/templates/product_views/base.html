@@ -42,6 +42,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'product_views:contacts' %}">Контакты</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'product_views:company_reviews' %}">Отзывы</a>
+                            </li>
                         </ul>
                         {% if request.user.is_authenticated %}
                         <div class="d-flex align-items-center">
